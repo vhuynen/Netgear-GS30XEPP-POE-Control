@@ -101,8 +101,6 @@ Arguments :
 - `port` : Target port number
 - `state` : Desired state (on or off)
 
-Ajouter le chamo Plus mettre le fichier dau niveau du configuration.yaml de Home Assistant
-
 ### scripts.yaml
 
 Defines the poe_control service that:
