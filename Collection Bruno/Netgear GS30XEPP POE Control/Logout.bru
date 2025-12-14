@@ -1,0 +1,15 @@
+meta {
+  name: Logout
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://{{SWITCH_IP}}/logout.cgi
+  body: none
+  auth: inherit
+}
+
+docs {
+  This endpoint is used to terminate the current session and log out from the Netgear switch.
+}

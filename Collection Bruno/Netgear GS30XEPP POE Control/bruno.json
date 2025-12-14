@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Netgear GS30XEPP POE Control",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

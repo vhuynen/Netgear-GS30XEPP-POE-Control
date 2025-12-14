@@ -1,0 +1,45 @@
+meta {
+  name: Desactivation POE
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://{{SWITCH_IP}}/PoEPortConfig.cgi?hash={{CSRF_HASH}}&ACTION=Apply&portID=7&ADMIN_MODE=0&PORT_PRIO=0&POW_MOD=3&POW_LIMT_TYP=2&POW_LIMT=30.0&DETEC_TYP=2&DISCONNECT_TYP=2
+  body: none
+  auth: inherit
+}
+
+params:query {
+  hash: {{CSRF_HASH}}
+  ACTION: Apply
+  portID: 7
+  ADMIN_MODE: 0
+  PORT_PRIO: 0
+  POW_MOD: 3
+  POW_LIMT_TYP: 2
+  POW_LIMT: 30.0
+  DETEC_TYP: 2
+  DISCONNECT_TYP: 2
+}
+
+headers {
+  Host: {{SWITCH_IP}}
+  Origin: http://{{SWITCH_IP}}
+  Referer: http://{{SWITCH_IP}}/index.cgi
+}
+
+docs {
+  Hash Field: The hash field is the attribute retrieved from the page returned by the dashboard.cgi request. Without the hash attribute, an error is returned indicating a hash verification failure.
+  
+  ADMIN_MODE Attribute: The ADMIN_MODE attribute controls the activation or deactivation of PoE on the port:
+  1 ⇒ Enable PoE
+  0 ⇒ Disable PoE
+  
+  Port Number (portID): The portID attribute corresponds to the physical port number on the device minus one. For example:
+  portID = 1 ⇒ physical port 0
+  portID = 2 ⇒ physical port 1
+  and so on.
+  
+  API Response: If the request is successful, the API returns an HTTP status 200 and SUCCESS in the body in raw mode.tut Http 200 et SUCCESS dans le body en mode row. 
+}

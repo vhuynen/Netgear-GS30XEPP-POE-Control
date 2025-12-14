@@ -1,0 +1,100 @@
+- switch:
+  - name: "POE Switch GS308EPP PORT 4"
+    unique_id: gs308epp_poe_port4
+    state: "{{ is_state('input_boolean.gs308epp_poe_port4_status', 'on') }}"
+    turn_on:
+      - service: script.poe_control
+        data:
+          port: 4
+          state: "on"
+    turn_off:
+      - service: script.poe_control
+        data:
+          port: 4
+          state: "off"
+    icon: >
+      {% if is_state('input_boolean.gs308epp_poe_port4_status', 'on') %}
+        mdi:flash
+      {% else %}
+        mdi:flash-off
+      {% endif %}
+
+  - name: "POE Switch GS308EPP PORT 5"
+    unique_id: gs308epp_poe_port5
+    state: "{{ is_state('input_boolean.gs308epp_poe_port5_status', 'on') }}"
+    turn_on:
+      - service: script.poe_control
+        data:
+          port: 5
+          state: "on"
+    turn_off:
+      - service: script.poe_control
+        data:
+          port: 5
+          state: "off"
+    icon: >
+      {% if is_state('input_boolean.gs308epp_poe_port5_status', 'on') %}
+        mdi:flash
+      {% else %}
+        mdi:flash-off
+      {% endif %}
+
+  - name: "POE Switch GS308EPP PORT 6"
+    unique_id: gs308epp_poe_port6
+    state: "{{ is_state('input_boolean.gs308epp_poe_port6_status', 'on') }}"
+    turn_on:
+      - service: script.poe_control
+        data:
+          port: 6
+          state: "on"
+    turn_off:
+      - service: script.poe_control
+        data:
+          port: 6
+          state: "off"
+    icon: >
+      {% if is_state('input_boolean.gs308epp_poe_port6_status', 'on') %}
+        mdi:flash
+      {% else %}
+        mdi:flash-off
+      {% endif %}
+
+  - name: "POE Switch GS308EPP PORT 7"
+    unique_id: gs308epp_poe_port7
+    state: "{{ is_state('input_boolean.gs308epp_poe_port7_status', 'on') }}"
+    turn_on:
+      - service: script.poe_control
+        data:
+          port: 7
+          state: "on"
+    turn_off:
+      - service: script.poe_control
+        data:
+          port: 7
+          state: "off"
+    icon: >
+      {% if is_state('input_boolean.gs308epp_poe_port7_status', 'on') %}
+        mdi:flash
+      {% else %}
+        mdi:flash-off
+      {% endif %}
+
+  - name: "POE Switch GS308EPP PORT 8"
+    unique_id: gs308epp_poe_port8
+    state: "{{ is_state('input_boolean.gs308epp_poe_port8_status', 'on') }}"
+    turn_on:
+      - service: script.poe_control
+        data:
+          port: 8
+          state: "on"
+    turn_off:
+      - service: script.poe_control
+        data:
+          port: 8
+          state: "off"
+    icon: >
+      {% if is_state('input_boolean.gs308epp_poe_port8_status', 'on') %}
+        mdi:flash
+      {% else %}
+        mdi:flash-off
+      {% endif %}

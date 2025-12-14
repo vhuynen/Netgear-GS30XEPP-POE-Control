@@ -1,0 +1,2 @@
+#  Execute Python script to dynamically manage PoE port
+netgear_poe: "bash -c '/config/Netgear_GS30XEPP_POE_Control.py {{ url }} {{ user }} {{ pass_hash }} {{ port }} {{ state }}'"

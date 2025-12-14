@@ -1,0 +1,16 @@
+script: !include scripts.yaml
+template: !include template.yaml
+shell_command: !include shell-command.yaml
+
+#-----------------input boolean-----------------
+input_boolean:
+  gs308epp_poe_port4_status:
+    name: POE status GS308EPP PORT 4
+  gs308epp_poe_port5_status:
+    name: POE status GS308EPP PORT 5
+  gs308epp_poe_port6_status:
+    name: POE status GS308EPP PORT 6
+  gs308epp_poe_port7_status:
+    name: POE status GS308EPP PORT 7
+  gs308epp_poe_port8_status:
+    name: POE status GS308EPP PORT 8

@@ -1,0 +1,37 @@
+meta {
+  name: Get Hidden Hash Attribut
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://{{SWITCH_IP}}/dashboard.cgi
+  body: none
+  auth: inherit
+}
+
+script:post-response {
+  if (res.status === 200) {
+    const hashRegex = /id='hash' value="(.*?)">/;
+  
+    const match = res.body.match(hashRegex);
+  
+    if (match && match[1]) {
+      const extractedHash = match[1];
+      bru.setVar('CSRF_HASH', extractedHash);
+  
+      console.log('✅ Hash CSRF : ' + extractedHash);
+    } else {
+      console.error("❌ The attribute 'hash' (CSRF) was not found in the response from the Dashboard page.");
+    }
+  } else {
+    console.error("❌ Request dashbord failed. Status: " + res.status);
+  }
+  
+}
+
+docs {
+  This endpoint is used to retrieve the hidden hash field required for modification requests. The attribute to extract from the returned page is:
+  <input type="hidden" name="hash" id="hash" value="e68b3d00c3d50d2e94b06e1adf44f72e">
+  The value of this field changes after each authentication.
+}

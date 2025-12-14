@@ -1,0 +1,21 @@
+poe_control:
+  description: "Control PoE dynamically"
+  fields:
+    port:
+      description: "Physical port number"
+      example: 1
+    state:
+      description: "PoE state (on/off)"
+      example: "on"
+  sequence:
+    - service: shell_command.netgear_poe
+      data:
+        url: !secret url_netgear_GS308EEP
+        user: "admin"
+        pass_hash: !secret hash_netgear_GS308EEP
+        port: "{{ port }}"
+        state: "{{ state }}"
+    - service: "input_boolean.turn_{{ state }}" 
+      target:
+        entity_id: "input_boolean.gs308epp_poe_port{{ port }}_status"
+  mode: queued
