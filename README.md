@@ -3,7 +3,28 @@
 This repository provides a **hacky integration** to control the PoE (Power over Ethernet) ports of Netgear GS30XEPP series switches directly from **Home Assistant**.  
 It leverages a Python script to interact with the switch’s API and a set of Home Assistant configuration files to expose each port as a controllable entity.
 
----
+## Tables Of Contents
+
+- [Netgear GS30XEPP PoE Control Hack for Home Assistant](#netgear-gs30xepp-poe-control-hack-for-home-assistant)
+  - [Tables Of Contents](#tables-of-contents)
+  - [Overview](#overview)
+  - [Prerequisite: Retrieve the Login Hash](#prerequisite-retrieve-the-login-hash)
+  - [Python Script Logic](#python-script-logic)
+    - [1. Login](#1-login)
+    - [2. CSRF Protection](#2-csrf-protection)
+    - [3. PoE Control](#3-poe-control)
+    - [4. Logout](#4-logout)
+    - [Deployment of the Python Script](#deployment-of-the-python-script)
+  - [Home Assistant Configuration](#home-assistant-configuration)
+    - [shell-command.yaml](#shell-commandyaml)
+    - [scripts.yaml](#scriptsyaml)
+    - [configuration.yaml](#configurationyaml)
+    - [tempalte.yaml](#tempalteyaml)
+    - [secrets.yaml](#secretsyaml)
+  - [Call Flow Diagram](#call-flow-diagram)
+  - [API Testing with Bruno](#api-testing-with-bruno)
+  - [Summary](#summary)
+  - [Disclaimer](#disclaimer)
 
 ## Overview
 
@@ -12,13 +33,7 @@ It leverages a Python script to interact with the switch’s API and a set of Ho
 - Home Assistant configuration integrates the script dynamically per port.  
 - State management is handled via `input_boolean` entities to ensure reliability even if the script fails or Home Assistant restarts.
 
----
-
-## Python Script Logic
-
-The Python script follows a **4-step process**:
-
-### Prerequisite: Retrieve the Login Hash
+## Prerequisite: Retrieve the Login Hash
 
 The login requires only the **hashed password**.  
 
@@ -31,7 +46,9 @@ To obtain it:
 
 This hash is used directly by the script.
 
----
+## Python Script Logic
+
+The Python script follows a **4-step process**:
 
 ### 1. Login
 
@@ -52,8 +69,6 @@ This hash is used directly by the script.
 - Logs out to release the session.
 
 > 💡 The script includes a shebang (`#!/usr/bin/env python3`) to simplify execution within Home Assistant.
-
----
 
 ### Deployment of the Python Script
 
