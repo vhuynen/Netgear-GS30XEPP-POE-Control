@@ -19,7 +19,7 @@ It leverages a Python script to interact with the switch’s API and a set of Ho
     - [shell-command.yaml](#shell-commandyaml)
     - [scripts.yaml](#scriptsyaml)
     - [configuration.yaml](#configurationyaml)
-    - [tempalte.yaml](#tempalteyaml)
+    - [template.yaml](#templateyaml)
     - [secrets.yaml](#secretsyaml)
   - [Call Flow Diagram](#call-flow-diagram)
   - [API Testing with Bruno](#api-testing-with-bruno)
@@ -163,7 +163,7 @@ input_boolean:
     name: POE status GS308EPP PORT 8
 ```
 
-### tempalte.yaml
+### template.yaml
 
 Defines the switch entities for each port.
 These switches call the `poe_control` service from `scripts.yaml` with the correct arguments.
