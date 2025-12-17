@@ -196,7 +196,7 @@ These switches call the `poe_control` service from `scripts.yaml` with the corre
 Stores sensitive credentials:
 
 ```yaml
-nurl_netgear_GS308EEP: "http://192.168.1.100"
+url_netgear_GS308EEP: "http://192.168.1.100"
 hash_netgear_GS308EEP: "your_password_hash_here"
 ```
 
