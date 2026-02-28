@@ -108,7 +108,7 @@ Arguments :
 
 - `url` : Switch URL
 - `user` : Username (typically admin)
-- `pass_hash` : Hashed password
+- `password` : Password
 - `port` : Target port number
 - `state` : Desired state (on or off)
 
