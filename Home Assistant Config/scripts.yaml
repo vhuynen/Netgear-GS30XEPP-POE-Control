@@ -12,7 +12,7 @@ poe_control:
       data:
         url: !secret url_netgear_GS308EEP
         user: "admin"
-        pass_hash: !secret hash_netgear_GS308EEP
+        password: !secret pass_netgear_GS308EEP
         port: "{{ port }}"
         state: "{{ state }}"
     - service: "input_boolean.turn_{{ state }}" 

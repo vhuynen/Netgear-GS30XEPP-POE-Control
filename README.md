@@ -8,13 +8,14 @@ It leverages a Python script to interact with the switch’s API and a set of Ho
 - [Netgear GS30XEPP PoE Control Hack for Home Assistant](#netgear-gs30xepp-poe-control-hack-for-home-assistant)
   - [Tables Of Contents](#tables-of-contents)
   - [Overview](#overview)
-  - [Prerequisite: Retrieve the Login Hash](#prerequisite-retrieve-the-login-hash)
   - [Python Script Logic](#python-script-logic)
-    - [1. Login](#1-login)
-    - [2. CSRF Protection](#2-csrf-protection)
-    - [3. PoE Control](#3-poe-control)
-    - [4. Logout](#4-logout)
+    - [1. Hash Password](#1-hash-password)
+    - [2. Login](#2-login)
+    - [3. CSRF Protection](#3-csrf-protection)
+    - [4. PoE Control](#4-poe-control)
+    - [5. Logout](#5-logout)
     - [Deployment of the Python Script](#deployment-of-the-python-script)
+      - [Installing Python Dependencies (requests \& beautifulsoup4)](#installing-python-dependencies-requests--beautifulsoup4)
   - [Home Assistant Configuration](#home-assistant-configuration)
     - [shell-command.yaml](#shell-commandyaml)
     - [scripts.yaml](#scriptsyaml)
@@ -33,53 +34,63 @@ It leverages a Python script to interact with the switch’s API and a set of Ho
 - Home Assistant configuration integrates the script dynamically per port.  
 - State management is handled via `input_boolean` entities to ensure reliability even if the script fails or Home Assistant restarts.
 
-## Prerequisite: Retrieve the Login Hash
-
-The login requires only the **hashed password**.  
-
-To obtain it:
-
-1. Open browser developer tools.
-2. Go to the **Network** tab and enable **Preserve Log**.  
-3. Perform a login attempt and locate the `login.cgi` call.  
-4. In the **Payload**, copy the value of the `password` attribute.  
-
-This hash is used directly by the script.
-
 ## Python Script Logic
 
-The Python script follows a **4-step process**:
+The Python script follows a **5-step process**:
 
-### 1. Login
+### 1. Hash Password
 
-- Performs login with a **35-second timeout**.  
-- Implements **retry** logic because the web server may take time to wake up on the first call.
+- Retrieve the hidden input element `rand`, which changes after each reboot of the switch.  
+- Merge the plain-text `password` with the `rand` value using the Netgear interleaving algorithm.  
+- Apply a standard MD5 hash to the merged string to generate the dynamic login hash.
 
-### 2. CSRF Protection
+### 2. Login
+
+- Performs login with the hashed password calculated previously
+
+### 3. CSRF Protection
 
 - Retrieves a hidden hash field required to prevent **CSRF attacks**.  
 - This token is mandatory for subsequent API modification calls.
 
-### 3. PoE Control
+### 4. PoE Control
 
 - Sends an API call to **enable or disable PoE** on the target port.
 
-### 4. Logout
+### 5. Logout
 
 - Logs out to release the session.
-
-> 💡 The script includes a shebang (`#!/usr/bin/env python3`) to simplify execution within Home Assistant.
 
 ### Deployment of the Python Script
 
 Before using the script in Home Assistant, you need to:
 
-1. Copy the Python script (Netgear_GS30XEPP_POE_Control.py) into the same directory as your Home Assistant configuration, typically alongside configuration.yaml.
+1. Copy the Python script [Netgear_GS30XEPP_POE_Control.py](/code/Home%20Assistant/Netgear_GS30XEPP_POE_Control.py) into the same directory as your Home Assistant configuration, typically alongside configuration.yaml.
 2. Make the script executable by running the following command on your Home Assistant host:
 
 ```shell
 chmod +x /config/Netgear_GS30XEPP_POE_Control.py
 ```
+
+:warning: Make sure the file uses Unix-style line endings (LF) to ensure proper execution on Home Assistant OS.
+
+#### Installing Python Dependencies (requests & beautifulsoup4)
+
+Home Assistant OS does not include pip inside its system Python environment.
+To run this script, you must manually install the required Python libraries in a persistent directory located under : `/config/python-libs/`
+
+1. Create the local library directory
+
+```shell
+mkdir -p /config/python-libs
+```
+
+2. Install the dependencies using the Studio Code Server add-on (VS Code for Home Assistant) :
+
+- Install the Studio Code Server add-on from the Home Assistant Add-on Store.
+- Open the VS Code interface.
+- Open a new terminal inside VS Code (Terminal → New Terminal).
+- Install the required Python libraries directly into /config/python-libs : `pip install --target /config/python-libs requests beautifulsoup4`
 
 ## Home Assistant Configuration
 
@@ -90,7 +101,7 @@ The integration is designed to be **dynamic per port**. Several configuration fi
 Defines the shell command to call the Python script with the required arguments:
 
 ```yaml
-netgear_poe: "bash -c '/config/Netgear_GS30XEPP_POE_Control.py {{ url }} {{ user }} {{ pass_hash }} {{ port }} {{ state }}'"
+netgear_poe: '/usr/bin/python3 /config/Netgear_GS30XEPP_POE_Control.py {{ url }} {{ user }} {{ password }} {{ port }} {{ state }}'
 ```
 
 Arguments :
@@ -123,7 +134,7 @@ poe_control:
       data:
         url: !secret url_netgear_GS308EEP
         user: "admin"
-        pass_hash: !secret hash_netgear_GS308EEP
+        password: !secret pass_netgear_GS308EEP
         port: "{{ port }}"
         state: "{{ state }}"
     - service: "input_boolean.turn_{{ state }}" 
@@ -197,7 +208,7 @@ Stores sensitive credentials:
 
 ```yaml
 url_netgear_GS308EEP: "http://192.168.1.100"
-hash_netgear_GS308EEP: "your_password_hash_here"
+pass_netgear_GS308EEP: "your_password_here"
 ```
 
 ## Call Flow Diagram
@@ -213,6 +224,7 @@ shell_command.netgear_poe
         │
         ▼
 Python script:
+  - Compile Hash Password
   - Login
   - Get CSRF token
   - Send PoE command

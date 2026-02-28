@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 
 import sys
+import time
+import hashlib
+
+# Make local libraries available (packages copied under /config/python-libs)
+# Required folders to exist under /config/python-libs:
+#   requests/, urllib3/, idna/, certifi/, charset_normalizer/ (or chardet/), bs4/, soupsieve/
+sys.path.insert(0, "/config/python-libs")
+
 import requests
 from bs4 import BeautifulSoup
-import time
-import hashlib  # MD5 hashing
 
 # --- CONSTANTS ---
 # General parameters for PoE configuration
